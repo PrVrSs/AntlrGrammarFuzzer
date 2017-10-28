@@ -1,4 +1,4 @@
-from generator import GeneratorFactory, ConfigGenerator, ConfigFileError
+from generator import ConfigGenerator, ConfigFileError
 import click
 
 
