@@ -121,7 +121,7 @@ class SqlForms(GeneratorMode):
                         print(rule, sentence)
                     yield sentence
 
-    def _create_tree(self, rule_name:str, position:int) -> list:
+    def _create_tree(self, rule_name: str, position: int) -> list:
         tree = RuleTree()
         dict_query = AntlrTree(self._query).get_tree()
         tree.add_root_node(dict_query[list(dict_query.keys())[0]])

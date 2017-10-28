@@ -17,10 +17,10 @@ def test_simple_rule():
 
 def test_rule_with_parenthesis():
     rule_string = """
-        (
-          STARTS start=timestampValue 
-        )
-        """
+                    (
+                    STARTS start=timestampValue
+                    )
+                  """
     scanner = ScannerAntl(rule_string)
     tokens = scanner.scan_tokens()
     token = tokens[0]

@@ -252,4 +252,3 @@ class ConfigGenerator(object):
         except FileNotFoundError:
             return False
         return False
-
