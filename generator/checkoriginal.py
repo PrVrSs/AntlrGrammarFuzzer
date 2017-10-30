@@ -19,7 +19,7 @@ class SQLParser(object):
 class MySqlParser(SQLParser):
 
     def __init__(self, user: str='root', password: str='toor', host: str='127.0.0.1', database: str=None, err: bool=False):
-        super().__init__(user=user, password=password, host=host, database=database,  err=err)
+        super().__init__(user=user, password=password, host=host, database=database, err=err)
 
     def check_syntax(self, input_data: str) -> bool:
         if self.database is None:

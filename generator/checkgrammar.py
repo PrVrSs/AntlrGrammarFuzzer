@@ -129,9 +129,8 @@ class CheckTSQLAntlr(object):
         print("Code is valid: " + str(is_valid))
 
 
-
 def main():
-    a = CheckAntlr()
+    a = CheckMySQLAntlr()
     query = '''DESC ` UTF8 ` select * from t'''
     a.parse_lines(query)
     # Parser()
