@@ -1,7 +1,7 @@
 from .scanner import ScannerAntl
 from .scanner import Parser
-from .checkgrammar import CheckAntlr
-from .checkoriginal import MySqlParser
+from .checkgrammar import CheckMySQLAntlr, CheckTSQLAntlr
+from .checkoriginal import MySqlParser, TSQlParser
 from .abstractgenerator import AbstractGeneratorFactory, AbstractGenerator
 import re
 from .my_error import SettingFuzzerError
@@ -114,7 +114,7 @@ class SQLGenerator(AbstractGenerator):
             tokens = scanner.scan_tokens()
             parser = Parser(tokens)
             tree = parser.parse()
-            self._rule_dictionary[i[0].replace('\n', '').replace('  ', '')] = tree
+            self._rule_dictionary[i[0].replace('\n', '').replace('  ', '').rstrip(' ')] = tree
 
     def set_probability(self, multiplication_scale: int=1, random_scale: int=1) -> None:
         if all(map(lambda scale: scale >= 0, [multiplication_scale, random_scale])):
@@ -160,7 +160,7 @@ class MySqlGenerator(SQLGenerator):
             pass
 
     def _check_antlr4_parser(self):
-        antlr4_parser = CheckAntlr()
+        antlr4_parser = CheckMySQLAntlr()
         try:
             while 1:
                 query = yield
@@ -176,11 +176,23 @@ class TransactSqlGenerator(SQLGenerator):
     def __init__(self, parser_file: str, lexer_file: str) -> None:
         super().__init__(parser_file, lexer_file, 'tsql')
 
-    def _check_original_parser(self, user: str, password: str, host: str, database=None, err=None):
-        pass
+    def _check_original_parser(self, user: str='root', password: str='toor', host: str='127.0.0.1', database=None, err: bool=False):
+        original_parser = TSQlParser(user=user, password=password, host=host, database=database, err=err)
+        try:
+            while 1:
+                query = yield
+                self._status_original = original_parser.check_syntax(input_data=query)
+        except GeneratorExit:
+            pass
 
     def _check_antlr4_parser(self):
-        pass
+        antlr4_parser = CheckTSQLAntlr()
+        try:
+            while 1:
+                query = yield
+                self._status_antlr4 = antlr4_parser.check_syntax(input_data=query)
+        except GeneratorExit:
+            pass
 
 
 class GeneratorFactory(AbstractGeneratorFactory):

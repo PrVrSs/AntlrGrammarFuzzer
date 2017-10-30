@@ -57,13 +57,10 @@ class GeneratorMode(object):
     def _get_random_rule(self):
         random.seed()
         if self._mutate_chance > random.randint(0, 100):
-            if random.randint(0, 5):
-                while 1:
-                    rule = [random.choice(list(self._rule_dictionary))]
-                    if rule[0] not in self._exception_rule:
-                        break
-            else:
-                rule = random.choice(self._combined_mutate_rule)
+            while 1:
+                rule = [random.choice(list(self._rule_dictionary))]
+                if rule[0] not in self._exception_rule:
+                    break
         else:
             rule = []
         return rule

@@ -1,6 +1,6 @@
 from .generator import GeneratorFactory
-from .checkgrammar import CheckAntlr, AntlrTree
-from .checkoriginal import MySqlParser
+from .checkgrammar import CheckMySQLAntlr, AntlrTree, CheckTSQLAntlr
+from .checkoriginal import MySqlParser, TSQlParser
 from .my_error import ConfigFileError, TimeoutError, SettingFuzzerError
 from .config_generator import ConfigGenerator
 from .scanner import ScannerAntl, TokenType, Ast, Parser

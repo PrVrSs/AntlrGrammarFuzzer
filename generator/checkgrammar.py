@@ -5,6 +5,8 @@ from grammar.antlr4.mysql.mysqlParser import mysqlParser
 from grammar.antlr4.mysql.mysqlLexer import mysqlLexer
 from antlr4.Utils import escapeWhitespace
 from antlr4.tree.Trees import Trees
+from grammar.antlr4.tsql.TSqlLexer import TSqlLexer
+from grammar.antlr4.tsql.TSqlParser import TSqlParser
 
 
 class TreePrinter(Trees):
@@ -27,7 +29,7 @@ class TreePrinter(Trees):
         return tree
 
 
-class CheckAntlr(object):
+class CheckMySQLAntlr(object):
     def __init__(self):
         self.lexer = mysqlLexer(None)
         self.parser = mysqlParser(None)
@@ -79,6 +81,53 @@ class AntlrTree(object):
 
     def get_tree(self):
         return TreePrinter.toDictionaryTree(self.tree, None, self.parser)
+
+
+class CheckTSQLAntlr(object):
+    def __init__(self):
+        self.lexer = TSqlLexer(None)
+        self.parser = TSqlParser(None)
+
+        self.parser._errHandler = BailErrorStrategy()
+        self.parser.removeErrorListeners()
+
+    def parse(self, text):
+        # errListener = ErrorListener()
+        # self.lexer.removeErrorListeners()
+        # self.lexer.addErrorListener(errListener)
+        char_stream = InputStream(text)
+        self.lexer.inputStream = char_stream
+        token_stream = CommonTokenStream(self.lexer)
+        self.parser.setInputStream(token_stream)
+        self.parser._interp.predictionMode = PredictionMode.SLL
+
+        try:
+            tree = self.parser.tsql_file()
+
+        except ParseCancellationException:
+            pass
+        else:
+            return tree
+        token_stream.reset()
+        self.parser.reset()
+        self.parser._interp.predictionMode = PredictionMode.LL
+        try:
+            tree = self.parser.tsql_file()
+        except ParseCancellationException:
+            tree = None
+        return tree
+
+    def check_syntax(self, input_data: str=''):
+        is_valid = False
+        tree = self.parse(input_data)
+        if tree:
+            is_valid = True
+        return is_valid
+
+    def parse_lines(self, query):
+        is_valid = self.check_syntax(query)
+        print("Code is valid: " + str(is_valid))
+
 
 
 def main():

@@ -1,7 +1,6 @@
 from .generator import GeneratorFactory
 import configparser
-from .checkgrammar import CheckAntlr
-from .checkoriginal import MySqlParser
+
 from .my_error import ConfigFileError, SettingFuzzerError
 
 
@@ -9,7 +8,7 @@ class ConfigGenerator(object):
 
     def __init__(self, config_file: str):
         self.check_original = None
-        self.check_antlr = None
+        # self.check_antlr = None
         self._config_file = configparser.ConfigParser()
         self._config_file.read(config_file)
         self._init_fuzzer()
@@ -24,7 +23,7 @@ class ConfigGenerator(object):
             raise ConfigFileError("Config file KeyError: Unknown antlr4 setting {}".format(e))
         try:
             self.generator = GeneratorFactory.create(parser_file, lexer_file, grammar_type)
-            self._init_antlr4_parser()
+            # self._init_antlr4_parser()
             self._init_original_parser()
             self._set_fuzzer_parameters()
         except SettingFuzzerError as e:
@@ -62,9 +61,6 @@ class ConfigGenerator(object):
                 self.generator._err = False
         except KeyError:
             print('not found original_parser_setting field! used default value')
-
-    def _init_antlr4_parser(self):
-        self.check_antlr = CheckAntlr()
 
     def _set_fuzzer_parameters(self):
 
@@ -222,9 +218,9 @@ class ConfigGenerator(object):
                 if sentence[1] and not sentence[2]:
                     if self.print_in_file:
                         with open(self._log_brut, 'a') as log_brut_file:
-                            log_brut_file.write("{}\n".format(sentence[0]))
+                            log_brut_file.write("{}\n".format("original: {} antlr: {} sentence: {}\n".format(sentence[1], sentence[2], sentence[0])))
                     if self.print_in_console:
-                        print("{}".format(sentence[0]))
+                        print("{}".format("original: {} antlr: {} sentence: {}\n".format(sentence[1], sentence[2], sentence[0])))
 
             elif self._print_mode == 3:
                 if not sentence[1] and sentence[2]:
