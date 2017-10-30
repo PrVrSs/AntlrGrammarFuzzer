@@ -3,4 +3,4 @@ mysql-connector==2.1.6
 pytest
 tox
 antlr4-python3-runtime
-
+pyodbc
