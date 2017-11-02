@@ -807,7 +807,7 @@ DECIMAL:             DEC_DIGIT+;
 ID:                  ( [A-Z_] | FullWidthLetter) ( [A-Z_$@0-9] | FullWidthLetter )*;
 QUOTED_URL:          '\''([A-Z][A-Z]+[:]) '//'(([A-Z]+[.]|[A-Z]+)|IPV4_ADDR) [:] DECIMAL '\'';
 QUOTED_HOST_AND_PORT:'\''(([A-Z]+[.]|[A-Z]+)|IPV4_ADDR) ([:] DECIMAL) '\'';
-STRING:              'N'? '\'' (~'\'' | '\'\'')* '\'';
+STRING:              'N'? '\'' (~'\'')* '\'';
 BINARY:              '0' 'X' HEX_DIGIT*;
 FLOAT:               DEC_DOT_DEC;
 REAL:                (DECIMAL | DEC_DOT_DEC) ('E' DEC_DIGIT+);
@@ -853,3 +853,8 @@ IPV4_OCTECT:           [0-9]?[0-9]?[0-9];
 fragment DEC_DOT_DEC:  (DEC_DIGIT+ '.' DEC_DIGIT+ |  DEC_DIGIT+ '.' | '.' DEC_DIGIT+);
 fragment HEX_DIGIT:    [0-9A-F];
 fragment DEC_DIGIT:    [0-9];
+
+
+fragment FullWidthLetter
+    : 'ABC'
+    ;

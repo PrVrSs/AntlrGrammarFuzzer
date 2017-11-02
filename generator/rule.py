@@ -141,4 +141,5 @@ class RuleTree(object):
         # rule_name = ''.join(list(map(lambda word: re.sub(r'\\\\', '\\\\', word), rule_name)))
         rule_name = CONST_FOR_REPLACE[rule_name] if rule_name in list(CONST_FOR_REPLACE.keys()) else rule_name
         rule_name = ''.join([s.strip("'") if s != "'" and s != "''" else s for s in [rule_name]])
+        rule_name = ''.join(list(map(lambda word: re.sub(r'\\', r"'", word), rule_name)))
         return rule_name

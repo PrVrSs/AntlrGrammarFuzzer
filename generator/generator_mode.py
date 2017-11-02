@@ -5,7 +5,7 @@ from .checkgrammar import AntlrTree
 import random
 
 trace_enabled = False
-drop_time = 1
+drop_time = 10
 
 
 class GeneratorMode(object):
