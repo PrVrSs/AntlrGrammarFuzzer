@@ -13,7 +13,7 @@ from .abstract_generator import AbstractGeneratorFactory, AbstractGenerator
 from .generator_mode import SqlForms, RandomQuery
 
 
-pass_lin = "mypass\n"
+PASS_LIN = "mypass\n"
 
 
 class SQLGenerator(AbstractGenerator):
@@ -56,7 +56,7 @@ class SQLGenerator(AbstractGenerator):
 
     @mutate_mode.setter
     def mutate_mode(self, mutate_mode):
-        assert type(mutate_mode) is bool
+        assert isinstance(mutate_mode, bool)
         self._mutate_mode = mutate_mode
 
     @property
@@ -65,7 +65,7 @@ class SQLGenerator(AbstractGenerator):
 
     @mutate_chance.setter
     def mutate_chance(self, mutate_chance):
-        assert type(mutate_chance) is int
+        assert isinstance(mutate_chance, int)
         self._mutate_chance = mutate_chance
 
     def generate_and_check_query(self, query: str = '', parent_node: str = '', check: bool = False, start_rule: str = 'root'):
@@ -73,12 +73,13 @@ class SQLGenerator(AbstractGenerator):
         antlr = self._check_antlr4_parser()
         original = self._check_original_parser(user=self._user, password=self._password, host=self._host, database=self._database, err=self._err)
         antlr.send(None), original.send(None)
+
         for query in query_generator:
             antlr.send(query), original.send(query)
             yield (query, self._status_original, self._status_antlr4)
-        else:
-            antlr.close()
-            original.close()
+
+        antlr.close()
+        original.close()
 
     def generate_query(self, query: str = '', parent_node: str = '', check: bool = False, start_rule: str = 'root'):
         if self._fuzzing_mode == 'random_query':
@@ -156,7 +157,7 @@ class MySqlGenerator(SQLGenerator):
                     self._status_original = original_parser.check_syntax(input_data=query)
                 except InterfaceError:  # mysql.connector.errors.InterfaceError: 2003: Can't connect to MySQL server on '127.0.0.1:3306' (111 Connection refused)
                     print("DOWN")
-                    os.popen("sudo -S /etc/init.d/mysql restart", 'w').write(pass_lin)
+                    os.popen("sudo -S /etc/init.d/mysql restart", 'w').write(PASS_LIN)
                     os.wait()
                     self._status_original = original_parser.check_syntax(input_data=query)
         except GeneratorExit:
