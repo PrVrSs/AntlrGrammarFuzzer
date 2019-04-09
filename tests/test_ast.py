@@ -1,5 +1,7 @@
-from generator import ScannerAntl, Parser, Ast
-from generator.scanner.antlrexpr import *
+from agf.antlr4_parser.scanner import ScannerAntl
+from agf.antlr4_parser.parser import Parser
+from agf.antlr4_parser.ast import Ast
+from agf.antlr4_parser.expressions import *
 
 
 def test_simple_rule():

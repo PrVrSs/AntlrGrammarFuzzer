@@ -1,4 +1,4 @@
-# Fuzzer for parsers which are created with Antlr4 parser generator 
+# AGF - Antlr4 grammar base Fuzzer
 
 Fuzzer according to the file of grammar(*.g4) builds trees and checks for correctness.
 

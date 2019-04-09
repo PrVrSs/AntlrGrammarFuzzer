@@ -1,3 +1,4 @@
+"""Abstract Generator"""
 import abc
 
 
@@ -6,7 +7,7 @@ class AbstractGenerator(abc.ABC):
     Generator for generate sentence
     """
     def __init__(self):
-        if type(self) is AbstractGenerator:
+        if isinstance(self, AbstractGenerator):
             raise NotImplementedError()
 
     @abc.abstractmethod
@@ -46,6 +47,7 @@ class AbstractGenerator(abc.ABC):
 
 
 class AbstractGeneratorFactory(abc.ABC):
+    """Generator Factory"""
 
     @staticmethod
     @abc.abstractmethod

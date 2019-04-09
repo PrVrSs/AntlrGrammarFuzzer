@@ -1,11 +1,10 @@
-"""
-Вспомогательные функции для отладки и не только...
-"""
+"""Decorators"""
 import functools
 import errno
 import os
 import signal
-from .my_error import TimeoutError
+
+from agf.my_error import TimeoutError
 
 
 def memoization(func):

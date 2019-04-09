@@ -1,12 +1,15 @@
-from .scanner import ScannerAntl
-from .scanner import Parser
-from .checkgrammar import CheckMySQLAntlr, CheckTSQLAntlr
-from .checkoriginal import MySqlParser, TSQlParser
-from .abstractgenerator import AbstractGeneratorFactory, AbstractGenerator
 import re
-from .my_error import SettingFuzzerError
-from mysql.connector.errors import InterfaceError
 import os
+
+from mysql.connector.errors import InterfaceError
+
+from agf.antlr4_parser import ScannerAntl
+from agf.antlr4_parser import Parser
+from agf.checkgrammar import CheckMySQLAntlr, CheckTSQLAntlr
+from agf.checkoriginal import MySqlParser, TSQlParser
+from agf.my_error import SettingFuzzerError
+
+from .abstract_generator import AbstractGeneratorFactory, AbstractGenerator
 from .generator_mode import SqlForms, RandomQuery
 
 
@@ -65,7 +68,7 @@ class SQLGenerator(AbstractGenerator):
         assert type(mutate_chance) is int
         self._mutate_chance = mutate_chance
 
-    def generate_and_check_query(self, query: str='', parent_node: str='', check: bool=False, start_rule: str = 'root'):
+    def generate_and_check_query(self, query: str = '', parent_node: str = '', check: bool = False, start_rule: str = 'root'):
         query_generator = self.generate_query(query=query, parent_node=parent_node, check=check, start_rule=start_rule)
         antlr = self._check_antlr4_parser()
         original = self._check_original_parser(user=self._user, password=self._password, host=self._host, database=self._database, err=self._err)
@@ -77,7 +80,7 @@ class SQLGenerator(AbstractGenerator):
             antlr.close()
             original.close()
 
-    def generate_query(self, query: str='', parent_node: str='', check: bool=False, start_rule: str = 'root'):
+    def generate_query(self, query: str = '', parent_node: str = '', check: bool = False, start_rule: str = 'root'):
         if self._fuzzing_mode == 'random_query':
             generator_mode = RandomQuery(**self.__dict__, start_rule=start_rule)
         elif self._fuzzing_mode == 'fuzzing_sql_forms':
@@ -86,7 +89,7 @@ class SQLGenerator(AbstractGenerator):
             raise SettingFuzzerError('Unknown fuzzing mode {}'.format(self._fuzzing_mode))
         return generator_mode.generate()
 
-    def set_position(self, position_type: str= 'single', start_position: int=0, end_position: int=1) -> None:
+    def set_position(self, position_type: str = 'single', start_position: int = 0, end_position: int = 1) -> None:
         if position_type == 'single':
             self._start_position = start_position
             self._end_position = start_position + 1
@@ -116,7 +119,7 @@ class SQLGenerator(AbstractGenerator):
             tree = parser.parse()
             self._rule_dictionary[i[0].replace('\n', '').replace('  ', '').rstrip(' ')] = tree
 
-    def set_probability(self, multiplication_scale: int=1, random_scale: int=1) -> None:
+    def set_probability(self, multiplication_scale: int = 1, random_scale: int = 1) -> None:
         if all(map(lambda scale: scale >= 0, [multiplication_scale, random_scale])):
             self._multiplication_scale = multiplication_scale
             self._random_scale = random_scale
@@ -144,7 +147,7 @@ class MySqlGenerator(SQLGenerator):
     def __init__(self, parser_file: str, lexer_file: str) -> None:
         super().__init__(parser_file, lexer_file, 'mysql')
 
-    def _check_original_parser(self, user: str='root', password: str='toor', host: str='127.0.0.1', database=None, err: bool=False):
+    def _check_original_parser(self, user: str = 'root', password: str = 'toor', host: str = '127.0.0.1', database=None, err: bool = False):
         original_parser = MySqlParser(user=user, password=password, host=host, database=database, err=err)
         try:
             while 1:
@@ -176,10 +179,10 @@ class TransactSqlGenerator(SQLGenerator):
     def __init__(self, parser_file: str, lexer_file: str) -> None:
         super().__init__(parser_file, lexer_file, 'tsql')
 
-    def _check_original_parser(self, user: str='root', password: str='toor', host: str='127.0.0.1', database=None, err: bool=False):
+    def _check_original_parser(self, user: str = 'root', password: str = 'toor', host: str = '127.0.0.1', database=None, err: bool = False):
         original_parser = TSQlParser(user=user, password=password, host=host, database=database, err=err)
         try:
-            while 1:
+            while True:
                 query = yield
                 self._status_original = original_parser.check_syntax(input_data=query)
         except GeneratorExit:
@@ -188,7 +191,7 @@ class TransactSqlGenerator(SQLGenerator):
     def _check_antlr4_parser(self):
         antlr4_parser = CheckTSQLAntlr()
         try:
-            while 1:
+            while True:
                 query = yield
                 self._status_antlr4 = antlr4_parser.check_syntax(input_data=query)
         except GeneratorExit:

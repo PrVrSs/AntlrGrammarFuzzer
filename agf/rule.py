@@ -30,7 +30,7 @@ class Action(Enum):
     insert_node = 4
 
 
-class RuleNode(object):
+class RuleNode:
 
     __slots__ = ["child", "name", "parent_pointer", ]
 
@@ -49,7 +49,7 @@ class RuleNode(object):
         self.parent_pointer = pointer
 
 
-class RuleTree(object):
+class RuleTree:
 
     __slots__ = ["rule_node", "list_leaf", ]
 
@@ -60,7 +60,7 @@ class RuleTree(object):
     def add_root_node(self, name: str)-> None:
         self.rule_node.append(RuleNode(name=name))
 
-    def _search_node(self, key: str='', node: RuleNode=None, find_type: Action=None, find_node: RuleNode=None):
+    def _search_node(self, key: str = '', node: RuleNode = None, find_type: Action = None, find_node: RuleNode = None):
         node_its = None
         if node is None:
             node_its = self._search_node(key=key, node=self.rule_node[0], find_type=find_type, find_node=find_node)
@@ -75,7 +75,7 @@ class RuleTree(object):
                 node_its = self._search_node(key=key, node=child, find_type=find_type, find_node=find_node)
         return node_its
 
-    def insert_node(self, position: int=0, parent_name_node: str='', name: str='', insert_type: Action=Action.insert_key, parent_node: RuleNode=None):
+    def insert_node(self, position: int = 0, parent_name_node: str = '', name: str = '', insert_type: Action = Action.insert_key, parent_node: RuleNode = None):
         new_child_rule = RuleNode(name=name)
         if insert_type is Action.insert_key:
             parent_node = self._search_node(key=parent_name_node, find_type=Action.found_key)
@@ -96,7 +96,7 @@ class RuleTree(object):
     def insert_nodes(self, node: RuleNode, list_child: list) -> None:
         list_node = [RuleNode(child) for child in list_child]
         node.add_child(list_node)
-        [r.set_pointer(node) for r in node.get_child()]
+        _ = [r.set_pointer(node) for r in node.get_child()]
         self.rule_node += list_node
 
     def dict_2_tree(self, parent_node: RuleNode, query_list: list):
@@ -133,7 +133,7 @@ class RuleTree(object):
                     count = 1
 
     @staticmethod
-    def _string_handling(rule_name: str='') -> str:
+    def _string_handling(rule_name: str = '') -> str:
         # rule_name = ''.join(list(map(lambda word: re.sub(r'\'\\\'\'', '\'', word), rule_name)))
         # rule_name = ''.join(list(map(lambda word: re.sub(r'\'"\'', r'"', word), rule_name)))
         # rule_name = ''.join(list(map(lambda word: re.sub(r'\'""\'', r'""', word), rule_name)))

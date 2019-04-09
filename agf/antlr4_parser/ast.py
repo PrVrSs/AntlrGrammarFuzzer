@@ -1,12 +1,22 @@
-from generator.scanner.antlrexpr import Literal
+"""AST"""
 import random
 
+from .expressions import Literal
 
-class Ast(object):
 
-    __slots__ = ['tree', '_multiplication_scale', '_random_scale', '_default_min_zero', '_default_min_one', '_default_min_or', '_default_max_or']
+class Ast:
+    """Ast"""
+    __slots__ = (
+        'tree',
+        '_multiplication_scale',
+        '_random_scale',
+        '_default_min_zero',
+        '_default_min_one',
+        '_default_min_or',
+        '_default_max_or'
+    )
 
-    def __init__(self, tree_: list=None, multiplication_scale: int = 1, random_scale: int = 1):
+    def __init__(self, tree_: list = None, multiplication_scale: int = 1, random_scale: int = 1) -> None:
         self.tree = tree_
         self._multiplication_scale = multiplication_scale
         self._random_scale = random_scale
@@ -17,7 +27,7 @@ class Ast(object):
 
     def get_ast(self) -> list:
         new_tree = self.tree[:]
-        while 1:
+        while True:
             for expr in self.tree:
                 value = expr.accept(self)
                 if expr.type != 'Literal' and not isinstance(value, list):
@@ -50,19 +60,6 @@ class Ast(object):
     def visit_plus_multiplication_grouping(self, expr) -> list:
         return self._unpacking_multiplication_grouping(expr=expr, min_=self._default_min_one, max_=self._multiplication_scale)
 
-    def _unpacking_random(self, expr):
-        random.seed()
-        result = expr.value if random.randint(self._default_min_zero, self._random_scale) else []
-        return result
-
-    @staticmethod
-    def _unpacking_multiplication_grouping(expr, min_: int = 1, max_: int = 1) -> list:
-        grouping_value = []
-        random.seed()
-        repeat = random.randint(min_, max_)
-        for index in range(repeat):
-            grouping_value += expr.value
-        return grouping_value
 
     @staticmethod
     def visit_tilde(expr):
@@ -73,6 +70,20 @@ class Ast(object):
 
     def visit_choice(self, expr):
         return self._do_choice(expr.left, expr.right)
+
+    def _unpacking_random(self, expr):
+        random.seed()
+        result = expr.value if random.randint(self._default_min_zero, self._random_scale) else []
+        return result
+
+    @staticmethod
+    def _unpacking_multiplication_grouping(expr, min_: int = 1, max_: int = 1) -> list:
+        grouping_value = []
+        random.seed()
+        repeat = random.randint(min_, max_)
+        for _ in range(repeat):
+            grouping_value += expr.value
+        return grouping_value
 
     def _do_choice(self, left, right):
         random.seed()
@@ -97,6 +108,6 @@ class Ast(object):
         literal_value = []
         random.seed()
         repeat = random.randint(min_, max_)
-        for index in range(repeat):
+        for _ in range(repeat):
             literal_value.append(expr.value)
         return literal_value

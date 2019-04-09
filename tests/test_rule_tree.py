@@ -1,5 +1,5 @@
-from generator.rule import RuleTree
-from generator.checkgrammar import AntlrTree
+from agf.rule import RuleTree
+from agf.checkgrammar import AntlrTree
 
 
 def test_simple_rule():

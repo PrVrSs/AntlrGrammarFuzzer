@@ -1,10 +1,12 @@
+"""Checker"""
 from antlr4 import CommonTokenStream, BailErrorStrategy
 from antlr4.atn.PredictionMode import PredictionMode
 from antlr4.error.Errors import ParseCancellationException, InputStream
-from grammar.antlr4.mysql.mysqlParser import mysqlParser
-from grammar.antlr4.mysql.mysqlLexer import mysqlLexer
 from antlr4.Utils import escapeWhitespace
 from antlr4.tree.Trees import Trees
+
+from grammar.antlr4.mysql.mysqlParser import mysqlParser
+from grammar.antlr4.mysql.mysqlLexer import mysqlLexer
 from grammar.antlr4.tsql.TSqlLexer import TSqlLexer
 from grammar.antlr4.tsql.TSqlParser import TSqlParser
 
@@ -14,22 +16,21 @@ class TreePrinter(Trees):
     It is used to print a parse tree.
     """
     @classmethod
-    def toDictionaryTree(cls, t, rule_names=None, recog=None):
+    def to_dictionary_tree(cls, parent, rule_names=None, recog=None):
         """ Converts  a parse tree to a dictionary. """
-        tree = {"name": "", "children": []}
+        tree = {'name': '', 'children': []}
         if recog is not None:
             rule_names = recog.ruleNames
-        s = escapeWhitespace(cls.getNodeText(t, rule_names), False)
-        tree["name"] = s
-        if t.getChildCount() == 0:
+        tree['name'] = escapeWhitespace(cls.getNodeText(parent, rule_names), False)
+        if parent.getChildCount() == 0:
             return tree
-        for i in range(0, t.getChildCount()):
-            a = cls.toDictionaryTree(t.getChild(i), rule_names)
-            tree["children"].append(a)
+        for i in range(0, parent.getChildCount()):
+            children = cls.to_dictionary_tree(parent.getChild(i), rule_names)
+            tree['children'].append(children)
         return tree
 
 
-class CheckMySQLAntlr(object):
+class CheckMySQLAntlr:
     def __init__(self):
         self.lexer = mysqlLexer(None)
         self.parser = mysqlParser(None)
@@ -57,7 +58,7 @@ class CheckMySQLAntlr(object):
             tree = None
         return tree
 
-    def check_syntax(self, input_data: str=''):
+    def check_syntax(self, input_data: str = ''):
         is_valid = False
         tree = self.parse(input_data)
         if tree:
@@ -69,7 +70,7 @@ class CheckMySQLAntlr(object):
         print("Code is valid: " + str(is_valid))
 
 
-class AntlrTree(object):
+class AntlrTree:
 
     def __init__(self, query: str):
         input_data = query
@@ -80,10 +81,10 @@ class AntlrTree(object):
         self.tree = self.parser.root()
 
     def get_tree(self):
-        return TreePrinter.toDictionaryTree(self.tree, None, self.parser)
+        return TreePrinter.to_dictionary_tree(self.tree, None, self.parser)
 
 
-class CheckTSQLAntlr(object):
+class CheckTSQLAntlr:
     def __init__(self):
         self.lexer = TSqlLexer(None)
         self.parser = TSqlParser(None)
@@ -117,7 +118,7 @@ class CheckTSQLAntlr(object):
             tree = None
         return tree
 
-    def check_syntax(self, input_data: str=''):
+    def check_syntax(self, input_data: str = ''):
         is_valid = False
         tree = self.parse(input_data)
         if tree:
@@ -130,9 +131,9 @@ class CheckTSQLAntlr(object):
 
 
 def main():
-    a = CheckMySQLAntlr()
+    checker = CheckMySQLAntlr()
     query = '''DESC ` UTF8 ` select * from t'''
-    a.parse_lines(query)
+    checker.parse_lines(query)
     # Parser()
 
 

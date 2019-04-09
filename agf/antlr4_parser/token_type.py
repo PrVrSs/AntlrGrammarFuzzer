@@ -1,3 +1,4 @@
+"""Token Type"""
 from enum import Enum, auto
 
 
@@ -16,6 +17,7 @@ class TokenType(Enum):
     EQUAL = auto()
     PLUS_EQUAL = auto()
     TILDE = auto()
+    NEW_LINE = auto()
     # literals
     TERMINAL = auto()
     NONTERMINAL = auto()

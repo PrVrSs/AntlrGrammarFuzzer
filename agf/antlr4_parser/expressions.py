@@ -1,8 +1,13 @@
-class Expr(object):
+"""Expressions"""
+
+
+class Expression:
+    """Base Expression"""
     pass
 
 
-class Choice(Expr):
+class Choice(Expression):
+    """Choice expression"""
     def __init__(self, left, operator, right):
         self.type = 'Choice'
         self.left = left
@@ -13,7 +18,8 @@ class Choice(Expr):
         return visitor.visit_choice(self)
 
 
-class Equal(Expr):
+class Equal(Expression):
+    """Equal expression"""
     def __init__(self, value):
         self.type = 'Equal'
         self.value = value
@@ -22,8 +28,8 @@ class Equal(Expr):
         return visitor.visit_equal(self)
 
 
-class Literal(Expr):
-
+class Literal(Expression):
+    """Literal expression"""
     def __init__(self, value):
         self.type = 'Literal'
         self.value = value
@@ -32,8 +38,8 @@ class Literal(Expr):
         return visitor.visit_literal(self)
 
 
-class RandomLiteral(Expr):
-
+class RandomLiteral(Expression):
+    """RandomLiteral expression"""
     def __init__(self, value):
         self.type = 'RandomLiteral'
         self.value = value
@@ -42,7 +48,8 @@ class RandomLiteral(Expr):
         return visitor.visit_random_literal(self)
 
 
-class StarMultiplication(Expr):
+class StarMultiplication(Expression):
+    """StarMultiplication expression"""
     def __init__(self, value):
         self.type = 'Multiplication'
         self.value = value
@@ -51,7 +58,8 @@ class StarMultiplication(Expr):
         return visitor.visit_star_multiplication(self)
 
 
-class PlusMultiplication(Expr):
+class PlusMultiplication(Expression):
+    """PlusMultiplication expression"""
     def __init__(self, value):
         self.type = 'Multiplication'
         self.value = value
@@ -60,7 +68,8 @@ class PlusMultiplication(Expr):
         return visitor.visit_plus_multiplication(self)
 
 
-class Grouping(Expr):
+class Grouping(Expression):
+    """Grouping expression"""
     def __init__(self, value):
         self.type = 'Grouping'
         self.value = value
@@ -69,7 +78,8 @@ class Grouping(Expr):
         return visitor.visit_grouping(self)
 
 
-class StarMultiplicationGrouping(Expr):
+class StarMultiplicationGrouping(Expression):
+    """StarMultiplicationGrouping expression"""
     def __init__(self, value):
         self.type = 'MultiplicationGrouping'
         self.value = value
@@ -78,7 +88,8 @@ class StarMultiplicationGrouping(Expr):
         return visitor.visit_star_multiplication_grouping(self)
 
 
-class PlusMultiplicationGrouping(Expr):
+class PlusMultiplicationGrouping(Expression):
+    """PlusMultiplicationGrouping expression"""
     def __init__(self, value):
         self.type = 'PlusMultiplicationGrouping'
         self.value = value
@@ -87,7 +98,8 @@ class PlusMultiplicationGrouping(Expr):
         return visitor.visit_plus_multiplication_grouping(self)
 
 
-class RandomGrouping(Expr):
+class RandomGrouping(Expression):
+    """RandomGrouping expression"""
     def __init__(self, value):
         self.type = 'RandomGrouping'
         self.value = value
@@ -96,7 +108,8 @@ class RandomGrouping(Expr):
         return visitor.visit_random_grouping(self)
 
 
-class Tilde(Expr):
+class Tilde(Expression):
+    """Tilde expression"""
     def __init__(self, value):
         self.type = 'Tilde'
         self.value = value

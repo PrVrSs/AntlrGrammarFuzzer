@@ -1,10 +1,16 @@
+"""Scanner"""
 from .token import Token
-from .tokentype import TokenType
+from .token_type import TokenType
 
 
-class ScannerAntl(object):
-
-    __slots__ = ['source', 'tokens', '_start', '_current']
+class ScannerAntl:
+    """Scanner"""
+    __slots__ = (
+        'source',
+        'tokens',
+        '_start',
+        '_current',
+    )
 
     def __init__(self, source):
         self.source = source
@@ -92,8 +98,8 @@ class ScannerAntl(object):
         return self.source[self._current - 1]
 
     @staticmethod
-    def _is_alpha(c):
-        return (97 <= ord(c) <= 122) or (65 <= ord(c) <= 90) or ord(c) == 95 or (48 <= ord(c) <= 57) or ord(c) == 45 or ord(c) == 36 or ord(c) == 46
+    def _is_alpha(char):
+        return (97 <= ord(char) <= 122) or (65 <= ord(char) <= 90) or ord(char) == 95 or (48 <= ord(char) <= 57) or ord(char) == 45 or ord(char) == 36 or ord(char) == 46
 
     def _match(self, expected):
         if self._is_at_end():

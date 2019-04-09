@@ -3641,7 +3641,7 @@ def serializedATN():
         return buf.getvalue()
 
 
-class mysqlParser ( Parser ):
+class mysqlParser(Parser):
 
     grammarFileName = "mysqlParser.g4"
 

@@ -1,4 +1,5 @@
-from generator import ScannerAntl, TokenType
+from agf.antlr4_parser.scanner import ScannerAntl
+from agf.antlr4_parser.token_type import TokenType
 
 
 # Test lexical analyzer

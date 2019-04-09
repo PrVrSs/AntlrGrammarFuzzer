@@ -1,10 +1,11 @@
+"""checker"""
+import pyodbc
 import mysql.connector
 from mysql.connector import errorcode
-import pyodbc
 
 
-class SQLParser(object):
-    def __init__(self, user: str='root', password: str='toor', host: str='127.0.0.1', database: str=None, err: bool=False):
+class SQLParser:
+    def __init__(self, user: str = 'root', password: str = 'toor', host: str = '127.0.0.1', database: str = None, err: bool = False):
 
         self.user = user
         self.password = password
@@ -18,7 +19,7 @@ class SQLParser(object):
 
 class MySqlParser(SQLParser):
 
-    def __init__(self, user: str='root', password: str='toor', host: str='127.0.0.1', database: str=None, err: bool=False):
+    def __init__(self, user: str = 'root', password: str = 'toor', host: str = '127.0.0.1', database: str = None, err: bool = False):
         super().__init__(user=user, password=password, host=host, database=database, err=err)
 
     def check_syntax(self, input_data: str) -> bool:
@@ -41,7 +42,7 @@ class MySqlParser(SQLParser):
 
 class TSQlParser(SQLParser):
 
-    def __init__(self, user: str='sa', password: str='toor', host: str='localhost', database: str='SampleDB', err: bool=False):
+    def __init__(self, user: str = 'sa', password: str = 'toor', host: str = 'localhost', database: str = 'SampleDB', err: bool = False):
         super().__init__(user=user, password=password, host=host, database=database, err=err)
 
     def check_syntax(self, input_data: str) -> bool:
@@ -49,10 +50,10 @@ class TSQlParser(SQLParser):
         cursor = cnxn.cursor()
         try:
             cursor.execute(input_data)
-        except pyodbc.ProgrammingError as e:
+        except pyodbc.ProgrammingError as exc:
             if self._err:
-                print('error :{}\nquery: {}'.format(e, input_data))
-            if "Incorrect syntax near" in str(e):
+                print(f'error :{exc}\nquery: {input_data}')
+            if 'Incorrect syntax near' in str(exc):
                 return False
         except pyodbc.OperationalError:
             return False
@@ -62,9 +63,9 @@ class TSQlParser(SQLParser):
 
 
 def main():
-    q = '''; select * from t;'''
-    a = MySqlParser()
-    print(a.check_syntax(q))
+    query = '''; select * from t;'''
+    parser = MySqlParser()
+    print(parser.check_syntax(query))
 
 
 if __name__ == "__main__":

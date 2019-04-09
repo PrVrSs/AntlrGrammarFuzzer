@@ -1,10 +1,11 @@
-from .generator import GeneratorFactory
 import configparser
 
-from .my_error import ConfigFileError, SettingFuzzerError
+from agf.my_error import ConfigFileError, SettingFuzzerError
+
+from .generator import GeneratorFactory
 
 
-class ConfigGenerator(object):
+class ConfigGenerator:
 
     def __init__(self, config_file: str):
         self.check_original = None
@@ -19,15 +20,15 @@ class ConfigGenerator(object):
             parser_file = self._config_file['antlr4_parser_setting']['parser_file']
             lexer_file = self._config_file['antlr4_parser_setting']['lexer_file']
             grammar_type = self._config_file['antlr4_parser_setting']['sql_type']
-        except KeyError as e:
-            raise ConfigFileError("Config file KeyError: Unknown antlr4 setting {}".format(e))
+        except KeyError as exc:
+            raise ConfigFileError(f'Config file KeyError: Unknown antlr4 setting {exc}')
         try:
             self.generator = GeneratorFactory.create(parser_file, lexer_file, grammar_type)
             # self._init_antlr4_parser()
             self._init_original_parser()
             self._set_fuzzer_parameters()
-        except SettingFuzzerError as e:
-            print(e)
+        except SettingFuzzerError as exc:
+            print(exc)
         self._init_print_parameters()
 
     def _init_original_parser(self):

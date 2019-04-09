@@ -1,8 +1,9 @@
-from .scanner import Ast
-from .rule import RuleTree
-from .supportfunc import logging, timeout
-from .checkgrammar import AntlrTree
 import random
+
+from agf.antlr4_parser import Ast
+from agf.rule import RuleTree
+from agf.checkgrammar import AntlrTree
+from agf.utils.decor import logging, timeout
 
 trace_enabled = False
 drop_time = 10
@@ -10,9 +11,16 @@ drop_time = 10
 
 class GeneratorMode(object):
 
-    __slots__ = ['_mutate_mode', '_rule_dictionary', '_multiplication_scale', '_random_scale',
-                 '_mutate_chance', '_combined_mutate_rule', '_exception_rule',
-                 '_count_to_generate']
+    __slots__ = (
+        '_mutate_mode',
+        '_rule_dictionary',
+        '_multiplication_scale',
+        '_random_scale',
+        '_mutate_chance',
+        '_combined_mutate_rule',
+        '_exception_rule',
+        '_count_to_generate',
+    )
 
     def __init__(self, **kwargs):
         self._mutate_mode = kwargs['_mutate_mode']
@@ -26,7 +34,7 @@ class GeneratorMode(object):
 
     @timeout(drop_time)
     def _build_tree(self, tree, node_count) -> bool:
-        while 1:
+        while True:
             if node_count == len(tree.rule_node):
                 break
             sub_rule_list = self._get_sub_rule_list(tree.rule_node[node_count].name)
@@ -34,6 +42,7 @@ class GeneratorMode(object):
                 sub_rule_list = self._mutate(sub_rule_list)
             tree.insert_nodes(tree.rule_node[node_count], sub_rule_list)
             node_count += 1
+
         return True
 
     @logging(trace_enabled)

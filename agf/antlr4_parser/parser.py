@@ -1,9 +1,22 @@
-from generator.scanner.antlrexpr import *
-from generator.scanner.tokentype import TokenType
+"""Antlr4 Parser"""
+from .token_type import TokenType
+from .expressions import (
+    Grouping,
+    Choice,
+    Equal,
+    StarMultiplication,
+    PlusMultiplication,
+    RandomLiteral,
+    Literal,
+    RandomGrouping,
+    PlusMultiplicationGrouping,
+    StarMultiplicationGrouping,
+    Tilde,
+)
 
 
-class Parser(object):
-
+class Parser:
+    """Parser"""
     def __init__(self, token_list):
         self._current = 0
         self.token_list = token_list
