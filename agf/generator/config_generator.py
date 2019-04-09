@@ -1,6 +1,6 @@
 import configparser
 
-from agf.my_error import ConfigFileError, SettingFuzzerError
+from agf.exceptions import ConfigFileError, SettingFuzzerError
 
 from .generator import GeneratorFactory
 

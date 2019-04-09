@@ -2,7 +2,7 @@ import random
 
 from agf.antlr4_parser import Ast
 from agf.rule import RuleTree
-from agf.checkgrammar import AntlrTree
+from agf.checker.checkgrammar import AntlrTree
 from agf.utils.decor import logging, timeout
 
 trace_enabled = False

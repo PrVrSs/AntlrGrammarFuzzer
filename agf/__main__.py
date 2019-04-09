@@ -1,7 +1,8 @@
 """main """
 import click
 
-from .generator.config_generator import ConfigGenerator, ConfigFileError
+from .generator.config_generator import ConfigGenerator
+from .exceptions import ConfigFileError
 
 
 @click.command()

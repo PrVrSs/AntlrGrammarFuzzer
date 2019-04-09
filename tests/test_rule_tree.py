@@ -1,5 +1,5 @@
 from agf.rule import RuleTree
-from agf.checkgrammar import AntlrTree
+from agf.checker.checkgrammar import AntlrTree
 
 
 def test_simple_rule():

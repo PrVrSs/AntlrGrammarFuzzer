@@ -5,9 +5,9 @@ from mysql.connector.errors import InterfaceError
 
 from agf.antlr4_parser import ScannerAntl
 from agf.antlr4_parser import Parser
-from agf.checkgrammar import CheckMySQLAntlr, CheckTSQLAntlr
-from agf.checkoriginal import MySqlParser, TSQlParser
-from agf.my_error import SettingFuzzerError
+from agf.checker.checkgrammar import CheckMySQLAntlr, CheckTSQLAntlr
+from agf.checker.checkoriginal import MySqlParser, TSQlParser
+from agf.exceptions import SettingFuzzerError
 
 from .abstract_generator import AbstractGeneratorFactory, AbstractGenerator
 from .generator_mode import SqlForms, RandomQuery
