@@ -5,4 +5,5 @@ env/
 .mypy_cache/
 .idea/
 
+.dmypy.json
 poetry.lock
